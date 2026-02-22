@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
+    <title>Déjanos tu Reseña - Almíbar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            background: linear-gradient(135deg, #FF6B35, #E63946);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 25px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 35px;
+        }
+        
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+        }
+        
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.5rem;
+            color: #000000;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            color: #666;
+            font-size: 1.05rem;
+            line-height: 1.6;
+        }
+        
+        .question-group {
+            margin-bottom: 35px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .question-group:last-of-type {
+            border-bottom: none;
+            margin-bottom: 25px;
+        }
+        
+        .question-label {
+            display: block;
+            margin-bottom: 15px;
+            color: #2C3E50;
+            font-weight: 600;
+            font-size: 1.05rem;
+            line-height: 1.4;
+        }
+        
+        .required {
+            color: #E63946;
+            margin-left: 3px;
+        }
+        
+        /* Star Rating */
+        .star-rating {
+            display: flex;
+            gap: 8px;
+            justify-content: center;
+            margin: 15px 0;
+        }
+        
+        .star {
+            font-size: 2.5rem;
+            color: #ddd;
+            cursor: pointer;
+            transition: all 0.2s;
+            user-select: none;
+        }
+        
+        .star:hover,
+        .star.active {
+            color: #FFD700;
+            transform: scale(1.1);
+        }
+        
+        .star.active {
+            animation: starPop 0.3s ease-out;
+        }
+        
+        @keyframes starPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1.1); }
+        }
+        
+        .rating-text {
+            text-align: center;
+            font-size: 0.95rem;
+            color: #666;
+            margin-top: 10px;
+            min-height: 24px;
+        }
+        
+        /* Text Inputs */
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s;
+            background: #ffffff;
+        }
+        
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+        
+        input[type="text"]:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #FF6B35;
+            box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.1);
+        }
+        
+        /* Radio Buttons */
+        .radio-group {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 10px;
+        }
+        
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 12px;
+            border-radius: 10px;
+            transition: all 0.3s;
+        }
+        
+        .radio-option:hover {
+            background: rgba(255, 107, 53, 0.05);
+        }
+        
+        .radio-option input[type="radio"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #FF6B35;
+        }
+        
+        .radio-option label {
+            cursor: pointer;
+            font-size: 1rem;
+            color: #333;
+        }
+        
+        /* Checkboxes */
+        .checkbox-group {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 10px;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        .checkbox-option:hover {
+            background: rgba(255, 107, 53, 0.05);
+        }
+        
+        .checkbox-option input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #FF6B35;
+        }
+        
+        .checkbox-option label {
+            cursor: pointer;
+            font-size: 0.95rem;
+            color: #333;
+        }
+        
+        /* Submit Button */
+        .btn-submit {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #FF6B35, #E63946);
+            border: none;
+            border-radius: 12px;
+            color: #ffffff;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.5rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.4s;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+            margin-top: 20px;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.6);
+        }
+        
+        .btn-submit:active {
+            transform: translateY(0);
+        }
+        
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: linear-gradient(135deg, #00FF9F, #00D9FF);
+            color: #000;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .success-message.show {
+            display: block;
+        }
+        
+        .success-message h2 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2.2rem;
+            margin-bottom: 15px;
+        }
+        
+        .success-message p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        
+        /* Back Link */
+        .btn-back {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 30px;
+            background: transparent;
+            border: 2px solid #2C3E50;
+            border-radius: 10px;
+            color: #2C3E50;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            text-align: center;
+        }
+        
+        .btn-back:hover {
+            background: #2C3E50;
+            color: white;
+        }
+        
+        .footer-note {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        /* Helper Text */
+        .helper-text {
+            font-size: 0.85rem;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+        
+        @media (max-width: 500px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .star {
+                font-size: 2rem;
+            }
+            
+            .btn-submit {
+                font-size: 1.3rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Botón Volver -->
+        <a href="index.html" style="display: inline-block; margin-bottom: 20px; padding: 10px 25px; background: rgba(255, 255, 255, 0.2); color: white; text-decoration: none; border-radius: 25px; font-weight: 600; border: 2px solid white; transition: all 0.3s;" onmouseover="this.style.background='rgba(255, 255, 255, 0.3)'" onmouseout="this.style.background='rgba(255, 255, 255, 0.2)'">
+            ← Volver al Inicio
+        </a>
+        
+        <div class="header">
+            <div class="icon">⭐</div>
+            <h1>DÉJANOS TU RESEÑA</h1>
+            <p class="subtitle">Tu opinión nos ayuda a mejorar cada día</p>
+        </div>
+        
+        <form id="reviewForm">
+            <!-- Pregunta 1: Calificación General -->
+            <div class="question-group">
+                <label class="question-label">
+                    1. ¿Cómo calificarías tu experiencia general en Almíbar?
+                    <span class="required">*</span>
+                </label>
+                <div class="star-rating" id="rating-general">
+                    <span class="star" data-rating="1">⭐</span>
+                    <span class="star" data-rating="2">⭐</span>
+                    <span class="star" data-rating="3">⭐</span>
+                    <span class="star" data-rating="4">⭐</span>
+                    <span class="star" data-rating="5">⭐</span>
+                </div>
+                <div class="rating-text" id="text-general"></div>
+                <input type="hidden" id="value-general" name="calificacion_general" required>
+            </div>
+            
+            <!-- Pregunta 2: Calidad de Comida -->
+            <div class="question-group">
+                <label class="question-label">
+                    2. ¿Qué te pareció la calidad de nuestra comida?
+                    <span class="required">*</span>
+                </label>
+                <div class="star-rating" id="rating-comida">
+                    <span class="star" data-rating="1">⭐</span>
+                    <span class="star" data-rating="2">⭐</span>
+                    <span class="star" data-rating="3">⭐</span>
+                    <span class="star" data-rating="4">⭐</span>
+                    <span class="star" data-rating="5">⭐</span>
+                </div>
+                <div class="rating-text" id="text-comida"></div>
+                <input type="hidden" id="value-comida" name="calificacion_comida" required>
+            </div>
+            
+            <!-- Pregunta 3: Calidad de Tragos -->
+            <div class="question-group">
+                <label class="question-label">
+                    3. ¿Cómo calificarías nuestros tragos y cócteles?
+                    <span class="required">*</span>
+                </label>
+                <div class="star-rating" id="rating-tragos">
+                    <span class="star" data-rating="1">⭐</span>
+                    <span class="star" data-rating="2">⭐</span>
+                    <span class="star" data-rating="3">⭐</span>
+                    <span class="star" data-rating="4">⭐</span>
+                    <span class="star" data-rating="5">⭐</span>
+                </div>
+                <div class="rating-text" id="text-tragos"></div>
+                <input type="hidden" id="value-tragos" name="calificacion_tragos" required>
+            </div>
+            
+            <!-- Pregunta 4: Atención del Personal -->
+            <div class="question-group">
+                <label class="question-label">
+                    4. ¿Qué tal fue la atención de nuestro personal?
+                    <span class="required">*</span>
+                </label>
+                <div class="star-rating" id="rating-atencion">
+                    <span class="star" data-rating="1">⭐</span>
+                    <span class="star" data-rating="2">⭐</span>
+                    <span class="star" data-rating="3">⭐</span>
+                    <span class="star" data-rating="4">⭐</span>
+                    <span class="star" data-rating="5">⭐</span>
+                </div>
+                <div class="rating-text" id="text-atencion"></div>
+                <input type="hidden" id="value-atencion" name="calificacion_atencion" required>
+            </div>
+            
+            <!-- Pregunta 5: Ambiente -->
+            <div class="question-group">
+                <label class="question-label">
+                    5. ¿Te gustó el ambiente y la decoración?
+                    <span class="required">*</span>
+                </label>
+                <div class="star-rating" id="rating-ambiente">
+                    <span class="star" data-rating="1">⭐</span>
+                    <span class="star" data-rating="2">⭐</span>
+                    <span class="star" data-rating="3">⭐</span>
+                    <span class="star" data-rating="4">⭐</span>
+                    <span class="star" data-rating="5">⭐</span>
+                </div>
+                <div class="rating-text" id="text-ambiente"></div>
+                <input type="hidden" id="value-ambiente" name="calificacion_ambiente" required>
+            </div>
+            
+            <!-- Pregunta 6: Relación Calidad-Precio -->
+            <div class="question-group">
+                <label class="question-label">
+                    6. ¿Cómo ves la relación calidad-precio?
+                    <span class="required">*</span>
+                </label>
+                <div class="star-rating" id="rating-precio">
+                    <span class="star" data-rating="1">⭐</span>
+                    <span class="star" data-rating="2">⭐</span>
+                    <span class="star" data-rating="3">⭐</span>
+                    <span class="star" data-rating="4">⭐</span>
+                    <span class="star" data-rating="5">⭐</span>
+                </div>
+                <div class="rating-text" id="text-precio"></div>
+                <input type="hidden" id="value-precio" name="calificacion_precio" required>
+            </div>
+            
+            <!-- Pregunta 7: Recomendación -->
+            <div class="question-group">
+                <label class="question-label">
+                    7. ¿Recomendarías Almíbar a tus amigos o familiares?
+                    <span class="required">*</span>
+                </label>
+                <div class="radio-group">
+                    <div class="radio-option">
+                        <input type="radio" id="rec-si" name="recomendaria" value="Definitivamente sí" required>
+                        <label for="rec-si">Definitivamente sí 😍</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="rec-probablemente" name="recomendaria" value="Probablemente sí">
+                        <label for="rec-probablemente">Probablemente sí 👍</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="rec-talvez" name="recomendaria" value="Tal vez">
+                        <label for="rec-talvez">Tal vez 🤔</label>
+                    </div>
+                    <div class="radio-option">
+                        <input type="radio" id="rec-no" name="recomendaria" value="Probablemente no">
+                        <label for="rec-no">Probablemente no 😐</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pregunta 8: ¿Qué te gustó más? -->
+            <div class="question-group">
+                <label class="question-label">
+                    8. ¿Qué fue lo que más te gustó? (puedes marcar varias)
+                </label>
+                <div class="checkbox-group">
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="gusto-comida" name="que_gusto" value="La comida">
+                        <label for="gusto-comida">La comida 🍽️</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="gusto-tragos" name="que_gusto" value="Los tragos">
+                        <label for="gusto-tragos">Los tragos 🍹</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="gusto-ambiente" name="que_gusto" value="El ambiente">
+                        <label for="gusto-ambiente">El ambiente 🎵</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="gusto-servicio" name="que_gusto" value="El servicio">
+                        <label for="gusto-servicio">El servicio 👨‍🍳</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="gusto-precios" name="que_gusto" value="Los precios">
+                        <label for="gusto-precios">Los precios 💰</label>
+                    </div>
+                    <div class="checkbox-option">
+                        <input type="checkbox" id="gusto-ubicacion" name="que_gusto" value="La ubicación">
+                        <label for="gusto-ubicacion">La ubicación 📍</label>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Pregunta 9: ¿Qué podemos mejorar? -->
+            <div class="question-group">
+                <label class="question-label">
+                    9. ¿En qué podríamos mejorar?
+                </label>
+                <textarea 
+                    id="mejorar" 
+                    name="que_mejorar" 
+                    placeholder="Cuéntanos qué crees que podríamos hacer mejor..."
+                    rows="4"
+                ></textarea>
+                <p class="helper-text">Opcional - Tu feedback es valioso para nosotros</p>
+            </div>
+            
+            <!-- Pregunta 10: Comentarios adicionales -->
+            <div class="question-group">
+                <label class="question-label">
+                    10. ¿Algún comentario adicional que quieras compartir?
+                </label>
+                <textarea 
+                    id="comentarios" 
+                    name="comentarios_adicionales" 
+                    placeholder="Comparte tu experiencia, sugerencias o algo que quieras destacar..."
+                    rows="4"
+                ></textarea>
+                <p class="helper-text">Opcional</p>
+            </div>
+            
+            <!-- Datos del Cliente -->
+            <div class="question-group">
+                <label class="question-label">
+                    Tu nombre (opcional)
+                </label>
+                <input 
+                    type="text" 
+                    id="nombre" 
+                    name="nombre_cliente" 
+                    placeholder="Ej: Juan Pérez"
+                >
+                <p class="helper-text">Si quieres que sepamos quién nos deja esta linda reseña 😊</p>
+            </div>
+            
+            <button type="submit" class="btn-submit" id="submitBtn">
+                📝 ENVIAR RESEÑA
+            </button>
+        </form>
+        
+        <div class="success-message" id="successMessage">
+            <h2>¡GRACIAS POR TU RESEÑA! 🎉</h2>
+            <p>Tu opinión es muy valiosa para nosotros.</p>
+            <p>¡Esperamos verte pronto de nuevo en Almíbar! 🍹</p>
+        </div>
+        
+        <center>
+            <a href="index.html" class="btn-back">← Volver al Inicio</a>
+        </center>
+        
+        <div class="footer-note">
+            <p>Almíbar Bar & Restaurant<br>
+            Francisco Moreno 418, Curicó<br>
+            📞 +56 9 5658 1436</p>
+        </div>
+    </div>
+    
+    <script>
+        // Textos para cada calificación
+        const ratingTexts = {
+            1: "Muy malo 😞",
+            2: "Malo 😕",
+            3: "Regular 😐",
+            4: "Bueno 😊",
+            5: "Excelente 🌟"
+        };
+        
+        // Configurar rating para cada pregunta
+        const ratings = ['general', 'comida', 'tragos', 'atencion', 'ambiente', 'precio'];
+        
+        ratings.forEach(ratingId => {
+            const stars = document.querySelectorAll(`#rating-${ratingId} .star`);
+            const valueInput = document.getElementById(`value-${ratingId}`);
+            const textDiv = document.getElementById(`text-${ratingId}`);
+            
+            stars.forEach(star => {
+                star.addEventListener('click', () => {
+                    const rating = star.getAttribute('data-rating');
+                    valueInput.value = rating;
+                    textDiv.textContent = ratingTexts[rating];
+                    
+                    // Actualizar estrellas activas
+                    stars.forEach(s => {
+                        const starRating = s.getAttribute('data-rating');
+                        if (starRating <= rating) {
+                            s.classList.add('active');
+                        } else {
+                            s.classList.remove('active');
+                        }
+                    });
+                });
+                
+                // Hover effect
+                star.addEventListener('mouseenter', () => {
+                    const rating = star.getAttribute('data-rating');
+                    stars.forEach(s => {
+                        const starRating = s.getAttribute('data-rating');
+                        if (starRating <= rating) {
+                            s.style.color = '#FFD700';
+                        } else {
+                            s.style.color = '#ddd';
+                        }
+                    });
+                });
+            });
+            
+            // Reset hover on mouse leave
+            document.getElementById(`rating-${ratingId}`).addEventListener('mouseleave', () => {
+                stars.forEach(s => {
+                    if (!s.classList.contains('active')) {
+                        s.style.color = '#ddd';
+                    } else {
+                        s.style.color = '#FFD700';
+                    }
+                });
+            });
+        });
+        
+        // Manejar envío del formulario
+        document.getElementById('reviewForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            // Validar que todas las calificaciones estén llenas
+            let allRated = true;
+            ratings.forEach(ratingId => {
+                if (!document.getElementById(`value-${ratingId}`).value) {
+                    allRated = false;
+                }
+            });
+            
+            if (!allRated) {
+                alert('Por favor califica todas las preguntas con estrellas antes de enviar');
+                return;
+            }
+            
+            // Recopilar datos
+            const formData = {
+                calificaciones: {
+                    general: document.getElementById('value-general').value,
+                    comida: document.getElementById('value-comida').value,
+                    tragos: document.getElementById('value-tragos').value,
+                    atencion: document.getElementById('value-atencion').value,
+                    ambiente: document.getElementById('value-ambiente').value,
+                    precio: document.getElementById('value-precio').value
+                },
+                recomendaria: document.querySelector('input[name="recomendaria"]:checked')?.value || 'No especificado',
+                queGusto: Array.from(document.querySelectorAll('input[name="que_gusto"]:checked')).map(cb => cb.value),
+                queMejorar: document.getElementById('mejorar').value,
+                comentarios: document.getElementById('comentarios').value,
+                nombre: document.getElementById('nombre').value || 'Anónimo'
+            };
+            
+            // Calcular promedio
+            const promedio = (
+                parseInt(formData.calificaciones.general) +
+                parseInt(formData.calificaciones.comida) +
+                parseInt(formData.calificaciones.tragos) +
+                parseInt(formData.calificaciones.atencion) +
+                parseInt(formData.calificaciones.ambiente) +
+                parseInt(formData.calificaciones.precio)
+            ) / 6;
+            
+            // Crear mensaje para WhatsApp
+            let mensaje = `🌟 *NUEVA RESEÑA - ALMÍBAR* 🌟
+
+👤 *Cliente:* ${formData.nombre}
+⭐ *Promedio General:* ${promedio.toFixed(1)}/5 estrellas
+
+📊 *CALIFICACIONES DETALLADAS:*
+━━━━━━━━━━━━━━━━━━━━
+🎯 Experiencia General: ${'⭐'.repeat(formData.calificaciones.general)} (${formData.calificaciones.general}/5)
+🍽️ Calidad de Comida: ${'⭐'.repeat(formData.calificaciones.comida)} (${formData.calificaciones.comida}/5)
+🍹 Tragos y Cócteles: ${'⭐'.repeat(formData.calificaciones.tragos)} (${formData.calificaciones.tragos}/5)
+👨‍🍳 Atención del Personal: ${'⭐'.repeat(formData.calificaciones.atencion)} (${formData.calificaciones.atencion}/5)
+🎵 Ambiente: ${'⭐'.repeat(formData.calificaciones.ambiente)} (${formData.calificaciones.ambiente}/5)
+💰 Calidad-Precio: ${'⭐'.repeat(formData.calificaciones.precio)} (${formData.calificaciones.precio}/5)
+
+🤝 *¿Nos recomendaría?* ${formData.recomendaria}`;
+
+            if (formData.queGusto.length > 0) {
+                mensaje += `
+
+❤️ *Lo que más le gustó:*
+${formData.queGusto.map(item => `• ${item}`).join('\n')}`;
+            }
+
+            if (formData.queMejorar) {
+                mensaje += `
+
+💡 *Sugerencias de mejora:*
+"${formData.queMejorar}"`;
+            }
+
+            if (formData.comentarios) {
+                mensaje += `
+
+💬 *Comentarios adicionales:*
+"${formData.comentarios}"`;
+            }
+
+            mensaje += `
+
+📅 *Fecha:* ${new Date().toLocaleString('es-CL')}
+━━━━━━━━━━━━━━━━━━━━
+
+¡Gracias por tu feedback! 🙏`;
+            
+            // Codificar mensaje para URL
+            const mensajeCodificado = encodeURIComponent(mensaje);
+            
+            // Número de WhatsApp de Almíbar
+            const numeroWhatsApp = '56956581436';
+            
+            // Crear URL de WhatsApp
+            const urlWhatsApp = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
+            
+            // Ocultar formulario y mostrar mensaje de éxito
+            document.getElementById('reviewForm').style.display = 'none';
+            document.getElementById('successMessage').classList.add('show');
+            
+            // Abrir WhatsApp después de un pequeño delay
+            setTimeout(() => {
+                window.open(urlWhatsApp, '_blank');
+            }, 500);
+        });
+    </script>
+</body>
+</html>

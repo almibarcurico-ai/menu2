@@ -1,0 +1,316 @@
+================================================================================
+🚀 GUÍA MAESTRA - CONFIGURACIÓN COMPLETA DE ALMÍBAR
+================================================================================
+
+Esta guía te llevará paso a paso para configurar TODAS las funcionalidades
+de tu sistema digital de Almíbar.
+
+================================================================================
+📋 CHECKLIST - ¿QUÉ NECESITAS CONFIGURAR?
+================================================================================
+
+✅ FUNCIONAN SIN CONFIGURACIÓN:
+   ✓ Logo de la PWA (ya está configurado)
+   ✓ Menús digitales
+   ✓ Carrito de compras
+   ✓ Happy Hour
+   ✓ Botones de navegación
+   ✓ Sistema de reservas
+   ✓ Formulario Club de Amigos (solo WhatsApp)
+   ✓ Formulario de reseñas (solo WhatsApp)
+
+⚙️ REQUIEREN CONFIGURACIÓN (15-30 min cada uno):
+   □ Notificación cuando dejen reseña
+   □ Reseñas se actualicen automáticamente en la web
+   □ Email automático de cumpleaños
+
+================================================================================
+PARTE 1: SUBIR TODO A GITHUB (5 MINUTOS)
+================================================================================
+
+PRIMERO LO PRIMERO: Sube todos los archivos para que la PWA funcione:
+
+1. Extrae el ZIP: ALMIBAR-FINAL-TODO-FUNCIONANDO.zip
+
+2. Sube estos archivos a tu repositorio GitHub:
+   
+   ✓ index.html
+   ✓ menu-cocina.html
+   ✓ menu-barra.html
+   ✓ club-amigos.html
+   ✓ reservas.html
+   ✓ resenas.html
+   ✓ resenas-con-sheets.html
+   ✓ ver-resenas.html
+   ✓ carrito.html
+   ✓ offline.html
+   ✓ manifest.json
+   ✓ sw.js
+   ✓ icons/ (TODA LA CARPETA)
+
+3. Verifica que funcione:
+   - Entra a: https://almibarcurico-ai.github.io/menu2/
+   - Instala la PWA
+   - ✅ El logo debería aparecer correctamente
+
+RESULTADO: ✅ PWA con logo funcionando
+
+
+================================================================================
+PARTE 2: SISTEMA DE RESEÑAS CON GOOGLE SHEETS (15-20 MINUTOS)
+================================================================================
+
+Este sistema tiene 2 partes:
+
+┌─────────────────────────────────────────────────────────────┐
+│                                                             │
+│  Cliente deja reseña                                        │
+│         ↓                                                   │
+│  resenas-con-sheets.html                                    │
+│         ↓                                                   │
+│  Google Apps Script (ESCRIBIR) ← Parte A                   │
+│         ↓                                                   │
+│  Google Sheets                                              │
+│         ↓                                                   │
+│  Google Apps Script (LEER) ← Parte B                       │
+│         ↓                                                   │
+│  ver-resenas.html (muestra reseñas actualizadas)           │
+│                                                             │
+└─────────────────────────────────────────────────────────────┘
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARTE 2A: CONFIGURAR ESCRITURA DE RESEÑAS (10 min)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📄 INSTRUCCIONES: INSTRUCCIONES-GOOGLE-SHEETS.txt
+
+PASOS:
+1. Crea un Google Sheet llamado "Reseñas Almíbar"
+2. Agrega los encabezados (están en el archivo)
+3. Ve a Extensiones → Apps Script
+4. Copia el código del archivo
+5. IMPORTANTE: Cambia el email:
+   var emailDestino = "tu-email@gmail.com";
+   Por tu email real
+6. Implementar → Nueva implementación → Web app
+7. Quién tiene acceso: Cualquier persona
+8. Copia la URL que te da
+9. Actualiza resenas-con-sheets.html con esa URL
+
+RESULTADO: 
+✅ Clientes pueden dejar reseñas
+✅ Se guardan en Google Sheets
+✅ Recibes email cada vez que dejen una reseña
+
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARTE 2B: CONFIGURAR LECTURA DE RESEÑAS (10 min)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+📄 INSTRUCCIONES: SCRIPT-LEER-RESENAS.txt
+
+PASOS:
+1. En el MISMO Google Sheet de arriba
+2. Ve a Apps Script (si cerraste, Extensiones → Apps Script)
+3. Agrega el código de SCRIPT-LEER-RESENAS.txt
+   (agregarlo al final, no borrar lo anterior)
+4. Implementar → Nueva implementación → Web app
+5. Copia la URL
+6. Abre ver-resenas.html
+7. Busca:
+   const GOOGLE_SHEETS_URL = 'TU_URL_DE_LECTURA_AQUI';
+   const USE_GOOGLE_SHEETS = false;
+8. Cambia por:
+   const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/TU_URL_REAL/exec';
+   const USE_GOOGLE_SHEETS = true;
+9. Sube ver-resenas.html a GitHub
+
+RESULTADO:
+✅ La página ver-resenas.html muestra reseñas reales
+✅ Se actualiza automáticamente
+✅ Los clientes ven las reseñas de otros clientes
+
+
+================================================================================
+PARTE 3: RECORDATORIOS DE CUMPLEAÑOS (15 MINUTOS)
+================================================================================
+
+📄 INSTRUCCIONES: SCRIPT-CUMPLEANOS-AUTOMATICO.txt
+
+PASOS:
+1. Abre tu Google Sheet del Club de Amigos
+2. Ve a Extensiones → Apps Script
+3. Copia el código de SCRIPT-CUMPLEANOS-AUTOMATICO.txt
+   (agregarlo al final del código existente)
+4. IMPORTANTE: Cambia el email en 2 lugares:
+   var emailDestino = "tu-email@gmail.com";
+   Por tu email real
+5. Ejecuta la función: configurarRecordatorioAutomatico
+6. Autoriza los permisos
+7. Recibirás un email de confirmación
+
+RESULTADO:
+✅ Recibes email automático cada día a las 8 AM
+✅ Lista de cumpleaños HOY
+✅ Lista de cumpleaños en 3 días
+✅ Lista de cumpleaños en 7 días
+✅ Con nombre, teléfono, edad y beneficios
+
+
+================================================================================
+VERIFICACIÓN FINAL - ¿TODO FUNCIONA?
+================================================================================
+
+✅ LOGO PWA:
+   □ Instala la app en tu celular
+   □ ¿Aparece el logo con el círculo degradado naranja?
+   □ Si SÍ → ✅ Funciona
+
+✅ NOTIFICACIÓN RESEÑA:
+   □ Haz una reseña de prueba en resenas-con-sheets.html
+   □ ¿Recibiste un email con la reseña?
+   □ ¿Se guardó en Google Sheets?
+   □ Si SÍ → ✅ Funciona
+
+✅ RESEÑAS SE ACTUALIZAN:
+   □ Entra a ver-resenas.html
+   □ ¿Ves las reseñas que has dejado?
+   □ ¿NO aparece el banner amarillo de "Modo de Ejemplo"?
+   □ Si SÍ → ✅ Funciona
+
+✅ EMAIL CUMPLEAÑOS:
+   □ En Apps Script, click en el reloj ⏰
+   □ ¿Aparece un activador "enviarRecordatoriosCumpleanos"?
+   □ Para probar: agrega una fecha de cumpleaños de HOY en el Sheet
+   □ Ejecuta manualmente la función
+   □ ¿Recibiste el email?
+   □ Si SÍ → ✅ Funciona
+
+
+================================================================================
+ORDEN RECOMENDADO DE CONFIGURACIÓN
+================================================================================
+
+DÍA 1 (30 minutos):
+   1. Sube todo a GitHub → Logo PWA funcionando
+   2. Configura escritura de reseñas (Parte 2A)
+
+DÍA 2 (20 minutos):
+   3. Configura lectura de reseñas (Parte 2B)
+   4. Configura cumpleaños automáticos
+
+O si tienes tiempo, hazlo todo de una vez en 45-60 minutos.
+
+
+================================================================================
+ARCHIVOS DE REFERENCIA
+================================================================================
+
+📁 Documentación incluida en el ZIP:
+
+CONFIGURACIÓN:
+├── INSTRUCCIONES-GOOGLE-SHEETS.txt
+│   └── Cómo guardar reseñas Y recibir notificación por email
+│
+├── SCRIPT-LEER-RESENAS.txt
+│   └── Cómo mostrar reseñas en la web en tiempo real
+│
+├── SCRIPT-CUMPLEANOS-AUTOMATICO.txt
+│   └── Cómo recibir emails automáticos de cumpleaños
+│
+└── esta-GUIA-MAESTRA.txt
+    └── Resumen de todo
+
+INFORMACIÓN:
+├── README.md
+│   └── Información general del proyecto
+│
+└── PWA-README.txt
+    └── Todo sobre la Progressive Web App
+
+
+================================================================================
+SOPORTE RÁPIDO
+================================================================================
+
+PROBLEMA: "El logo no aparece al instalar"
+→ Verifica que subiste la carpeta icons/ completa a GitHub
+→ Borra caché del navegador e reinstala
+
+PROBLEMA: "No recibo email de reseñas"
+→ Verifica que cambiaste el email en el código
+→ Revisa tu carpeta de Spam
+→ Verifica que autorizaste los permisos en Google
+
+PROBLEMA: "Las reseñas no se actualizan"
+→ Verifica que USE_GOOGLE_SHEETS = true
+→ Verifica que la URL termine en /exec
+→ Prueba la URL en el navegador directamente
+
+PROBLEMA: "No recibo emails de cumpleaños"
+→ Verifica que ejecutaste configurarRecordatorioAutomatico
+→ Verifica que el activador aparece en el reloj ⏰
+→ Verifica que cambiaste el email en el código
+
+
+================================================================================
+RESUMEN EJECUTIVO
+================================================================================
+
+4 FUNCIONALIDADES PRINCIPALES:
+
+1. ✅ LOGO PWA
+   Estado: LISTO
+   Acción: Solo subir archivos
+   Tiempo: 5 minutos
+
+2. ⚙️ NOTIFICACIÓN RESEÑA
+   Estado: Código listo, requiere configuración
+   Acción: Seguir INSTRUCCIONES-GOOGLE-SHEETS.txt
+   Tiempo: 10 minutos
+
+3. ⚙️ RESEÑAS ACTUALIZADAS
+   Estado: Código listo, requiere configuración  
+   Acción: Seguir SCRIPT-LEER-RESENAS.txt
+   Tiempo: 10 minutos
+
+4. ⚙️ EMAIL CUMPLEAÑOS
+   Estado: Código listo, requiere configuración
+   Acción: Seguir SCRIPT-CUMPLEANOS-AUTOMATICO.txt
+   Tiempo: 15 minutos
+
+TOTAL: 40 minutos para configurar todo
+
+
+================================================================================
+¡ÉXITO!
+================================================================================
+
+Una vez configurado todo, tendrás:
+
+✅ App instalable con tu logo
+✅ Menús digitales profesionales
+✅ Sistema de reservas con beneficios
+✅ Sistema de reseñas automático
+✅ Notificaciones de nuevas reseñas
+✅ Recordatorios de cumpleaños
+✅ Todo funcionando 24/7 automáticamente
+
+¡Felicitaciones! Tu sistema digital está completo 🎉
+
+
+================================================================================
+PRÓXIMOS PASOS OPCIONALES
+================================================================================
+
+Una vez que todo funcione, puedes agregar:
+
+□ Google Analytics (medir visitas)
+□ Notificaciones Push (ofertas a clientes)
+□ Modo "Llamar Mesero" en la app
+□ Integración con sistema de delivery
+□ Dashboard de estadísticas
+□ Sistema de puntos/fidelización
+
+Pero primero, ¡configura lo básico! 🚀
