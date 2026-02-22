@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sin Conexión - Almíbar</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #FF6B35, #E63946);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 500px;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            text-align: center;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+        
+        .icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            font-size: 2rem;
+            color: #2C3E50;
+            margin-bottom: 15px;
+        }
+        
+        p {
+            color: #666;
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+        
+        .btn {
+            padding: 15px 30px;
+            background: linear-gradient(135deg, #FF6B35, #E63946);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 5px 20px rgba(255, 107, 53, 0.4);
+            transition: all 0.3s;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(255, 107, 53, 0.6);
+        }
+        
+        .cached-content {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 107, 53, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #FF6B35;
+        }
+        
+        .cached-content h3 {
+            color: #E63946;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        
+        .cached-content ul {
+            text-align: left;
+            list-style: none;
+            padding: 0;
+        }
+        
+        .cached-content li {
+            padding: 8px 0;
+            color: #2C3E50;
+        }
+        
+        .cached-content li:before {
+            content: "✓ ";
+            color: #00FF9F;
+            font-weight: 700;
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">📡</div>
+        <h1>Sin Conexión a Internet</h1>
+        <p>Parece que no tienes conexión en este momento. No te preocupes, puedes seguir viendo algunas secciones de Almíbar.</p>
+        
+        <button class="btn" onclick="window.location.reload()">
+            🔄 Reintentar Conexión
+        </button>
+        
+        <div class="cached-content">
+            <h3>📱 Contenido Disponible Offline:</h3>
+            <ul>
+                <li>Ver Menú de Cocina</li>
+                <li>Ver Menú de Barra</li>
+                <li>Ver Promociones</li>
+                <li>Información de Contacto</li>
+            </ul>
+        </div>
+        
+        <p style="margin-top: 30px; font-size: 0.9rem; color: #999;">
+            📍 Francisco Moreno 418, Curicó<br>
+            📞 +56 9 5658 1436
+        </p>
+    </div>
+    
+    <script>
+        // Check connection every 5 seconds
+        setInterval(() => {
+            if (navigator.onLine) {
+                window.location.reload();
+            }
+        }, 5000);
+        
+        // Visual feedback when back online
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+    </script>
+</body>
+</html>
