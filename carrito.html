@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=1200">
+    <title>Mi Pedido - Almíbar</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #1A1A2E;
+            color: #FFFFFF;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3rem;
+            color: #FF6B35;
+            text-align: center;
+            margin-bottom: 30px;
+            letter-spacing: 3px;
+        }
+        
+        .cart-section {
+            background: #16213E;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #FF6B35;
+        }
+        
+        .cart-item {
+            background: #1A1A2E;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border: 1px solid #FF6B35;
+        }
+        
+        .item-info {
+            flex: 1;
+        }
+        
+        .item-name {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #FFFFFF;
+            margin-bottom: 5px;
+        }
+        
+        .item-price {
+            color: #F4D03F;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .item-controls {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .qty-btn {
+            background: #FF6B35;
+            color: white;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            cursor: pointer;
+            font-weight: 700;
+            transition: all 0.3s;
+        }
+        
+        .qty-btn:hover {
+            background: #E63946;
+            transform: scale(1.1);
+        }
+        
+        .qty-display {
+            font-size: 1.5rem;
+            font-weight: 700;
+            min-width: 40px;
+            text-align: center;
+            color: #F4D03F;
+        }
+        
+        .btn-remove {
+            background: #E63946;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-remove:hover {
+            background: #c41e2a;
+        }
+        
+        .empty-cart {
+            text-align: center;
+            padding: 60px 20px;
+            color: #ccc;
+            font-size: 1.2rem;
+        }
+        
+        .total-section {
+            background: #16213E;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #F4D03F;
+        }
+        
+        .total-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #F4D03F;
+        }
+        
+        .form-section {
+            background: #16213E;
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            border: 2px solid #FF6B35;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #FFFFFF;
+            font-size: 1.1rem;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #FF6B35;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            background: #1A1A2E;
+            color: #FFFFFF;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: #F4D03F;
+            box-shadow: 0 0 0 3px rgba(244, 208, 63, 0.2);
+        }
+        
+        .required {
+            color: #E63946;
+            font-weight: 700;
+        }
+        
+        .btn-send {
+            width: 100%;
+            padding: 20px;
+            background: linear-gradient(135deg, #FF6B35, #E63946);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+        }
+        
+        .btn-send:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(230, 57, 70, 0.6);
+        }
+        
+        .btn-send:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        .btn-back {
+            display: inline-block;
+            margin-bottom: 30px;
+            padding: 12px 30px;
+            background: transparent;
+            border: 2px solid #FF6B35;
+            border-radius: 10px;
+            color: #FF6B35;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        
+        .btn-back:hover {
+            background: #FF6B35;
+            color: #1A1A2E;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="javascript:history.back()" class="btn-back">← Volver al Menú</a>
+        
+        <h1>🛒 MI PEDIDO</h1>
+        
+        <div class="cart-section">
+            <div id="cartItems"></div>
+        </div>
+        
+        <div class="total-section" id="totalSection" style="display: none;">
+            <div class="total-row">
+                <span>TOTAL:</span>
+                <span id="totalAmount">$0</span>
+            </div>
+        </div>
+        
+        <div class="form-section" id="formSection" style="display: none;">
+            <div class="form-group">
+                <label class="form-label">Número de Mesa <span class="required">*</span></label>
+                <input type="number" class="form-input" id="mesaInput" placeholder="Ingresa el número de tu mesa" min="1">
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">Tu Nombre <span class="required">*</span></label>
+                <input type="text" class="form-input" id="nombreInput" placeholder="Ingresa tu nombre">
+            </div>
+            
+            <button class="btn-send" onclick="enviarPedido()">📱 ENVIAR PEDIDO POR WHATSAPP</button>
+        </div>
+    </div>
+    
+    <script>
+        // Obtener carrito del localStorage
+        function getCart() {
+            const cart = localStorage.getItem('almibar_cart');
+            return cart ? JSON.parse(cart) : [];
+        }
+        
+        // Guardar carrito en localStorage
+        function saveCart(cart) {
+            localStorage.setItem('almibar_cart', JSON.stringify(cart));
+        }
+        
+        // Actualizar cantidad
+        function updateQty(index, change) {
+            let cart = getCart();
+            cart[index].quantity += change;
+            
+            if (cart[index].quantity <= 0) {
+                cart.splice(index, 1);
+            }
+            
+            saveCart(cart);
+            renderCart();
+        }
+        
+        // Eliminar item
+        function removeItem(index) {
+            let cart = getCart();
+            cart.splice(index, 1);
+            saveCart(cart);
+            renderCart();
+        }
+        
+        // Renderizar carrito
+        function renderCart() {
+            const cart = getCart();
+            const cartItems = document.getElementById('cartItems');
+            const totalSection = document.getElementById('totalSection');
+            const formSection = document.getElementById('formSection');
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<div class="empty-cart">Tu carrito está vacío<br><br>🍽️<br><br>Vuelve al menú para agregar productos</div>';
+                totalSection.style.display = 'none';
+                formSection.style.display = 'none';
+                return;
+            }
+            
+            let html = '';
+            let total = 0;
+            
+            cart.forEach((item, index) => {
+                const subtotal = item.price * item.quantity;
+                total += subtotal;
+                
+                html += `
+                    <div class="cart-item">
+                        <div class="item-info">
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-price">$${item.price.toLocaleString('es-CL')} c/u</div>
+                        </div>
+                        <div class="item-controls">
+                            <button class="qty-btn" onclick="updateQty(${index}, -1)">−</button>
+                            <span class="qty-display">${item.quantity}</span>
+                            <button class="qty-btn" onclick="updateQty(${index}, 1)">+</button>
+                            <button class="btn-remove" onclick="removeItem(${index})">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            cartItems.innerHTML = html;
+            document.getElementById('totalAmount').textContent = '$' + total.toLocaleString('es-CL');
+            totalSection.style.display = 'block';
+            formSection.style.display = 'block';
+        }
+        
+        // Enviar pedido
+        function enviarPedido() {
+            const mesa = document.getElementById('mesaInput').value.trim();
+            const nombre = document.getElementById('nombreInput').value.trim();
+            
+            if (!mesa) {
+                alert('⚠️ Por favor ingresa el número de mesa');
+                document.getElementById('mesaInput').focus();
+                return;
+            }
+            
+            if (!nombre) {
+                alert('⚠️ Por favor ingresa tu nombre');
+                document.getElementById('nombreInput').focus();
+                return;
+            }
+            
+            const cart = getCart();
+            
+            if (cart.length === 0) {
+                alert('El carrito está vacío');
+                return;
+            }
+            
+            // Construir mensaje
+            let mensaje = `🍽️ *NUEVO PEDIDO - ALMÍBAR*\n\n`;
+            mensaje += `👤 *Cliente:* ${nombre}\n`;
+            mensaje += `🏷️ *Mesa:* ${mesa}\n\n`;
+            mensaje += `━━━━━━━━━━━━━━━\n`;
+            mensaje += `*PEDIDO:*\n`;
+            mensaje += `━━━━━━━━━━━━━━━\n`;
+            
+            let total = 0;
+            cart.forEach(item => {
+                mensaje += `\n✓ *${item.quantity}x* ${item.name}\n`;
+                mensaje += `   💵 $${item.price.toLocaleString('es-CL')} c/u\n`;
+                total += item.price * item.quantity;
+            });
+            
+            mensaje += `\n━━━━━━━━━━━━━━━\n`;
+            mensaje += `💰 *TOTAL: $${total.toLocaleString('es-CL')}*\n`;
+            mensaje += `━━━━━━━━━━━━━━━`;
+            
+            const mensajeCodificado = encodeURIComponent(mensaje);
+            const numeroWhatsApp = '56956581436';
+            const url = `https://wa.me/${numeroWhatsApp}?text=${mensajeCodificado}`;
+            
+            // Abrir WhatsApp
+            window.open(url, '_blank');
+            
+            // Limpiar carrito
+            localStorage.removeItem('almibar_cart');
+            
+            // Mostrar mensaje de éxito
+            alert('✓ Pedido enviado por WhatsApp');
+            
+            // Volver al menú
+            setTimeout(() => {
+                window.location.href = 'menu-barra.html';
+            }, 1000);
+        }
+        
+        // Cargar carrito al iniciar
+        renderCart();
+    </script>
+</body>
+</html>
