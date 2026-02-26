@@ -1,0 +1,256 @@
+================================================================================
+🔧 SOLUCIÓN A PROBLEMAS EN RESERVAS.HTML
+================================================================================
+
+Has reportado 2 problemas:
+1. ❌ No se muestran los beneficios al llenar el formulario
+2. ❌ El horario muestra formato 12h (01-12) en lugar de 24h (17-22)
+
+================================================================================
+✅ SOLUCIONES APLICADAS
+================================================================================
+
+PROBLEMA 1: BENEFICIOS NO SE MUESTRAN
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Causa: El CSS tenía `display: none` y dependía de clase `.show`
+Solución: Cambiado a mostrar automáticamente cuando tiene contenido
+
+ANTES (CSS):
+    .dynamic-benefit {
+        display: none;  ← Siempre oculto
+    }
+    .dynamic-benefit.show {
+        display: block;
+    }
+
+DESPUÉS (CSS):
+    .dynamic-benefit {
+        margin-top: 20px;
+    }
+    .dynamic-benefit:empty {
+        display: none;  ← Solo oculto si está vacío
+    }
+
+Ahora el div se muestra automáticamente cuando el JavaScript inyecta contenido.
+
+
+PROBLEMA 2: HORARIO EN FORMATO 12H (AM/PM)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Causa: El navegador usa la configuración regional del sistema operativo
+Solución: Agregado step="900" y texto explicativo (5 PM - 10 PM)
+
+ACTUALIZACIÓN:
+    <input type="time" 
+           min="17:00" 
+           max="22:00" 
+           step="900"  ← Intervalos de 15 minutos
+           required>
+    
+    Texto: "⏰ Horario de reservas: 17:00 - 22:00 (5 PM - 10 PM)"
+
+⚠️ IMPORTANTE: El formato 12h/24h depende del NAVEGADOR y SISTEMA OPERATIVO:
+    - Windows en español → Muestra 24h
+    - Windows en inglés → Muestra 12h (AM/PM)
+    - macOS/iOS → Depende del idioma del sistema
+    - Android → Depende del idioma del sistema
+
+El input FUNCIONA correctamente aunque se vea en formato 12h. Los límites
+min="17:00" y max="22:00" se respetan en ambos formatos.
+
+================================================================================
+🧪 CÓMO VERIFICAR QUE FUNCIONA
+================================================================================
+
+PRUEBA 1: BENEFICIOS DINÁMICOS
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Abre la consola del navegador (F12)
+2. Ve a la pestaña "Console"
+3. Llena el formulario de reservas
+4. Debes ver mensajes como:
+   "updateDynamicBenefit called: {fecha: '2026-02-26', personas: 10, motivo: 'Cumpleaños'}"
+
+Si NO ves mensajes:
+   → El JavaScript no se está cargando
+   → Borra la caché del navegador (Ctrl+Shift+Delete)
+   → Recarga la página (Ctrl+Shift+R)
+
+Si SÍ ves mensajes pero NO ves el cuadro de beneficios:
+   → Revisa el CSS del div#dynamicBenefit
+   → Abre Inspector (F12) → Elements → Busca <div id="dynamicBenefit">
+   → Verifica que tenga contenido HTML dentro
+
+
+PRUEBA 2: HORARIO LIMITADO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Haz click en el campo "Hora de la Reserva"
+2. Verifica las opciones disponibles:
+
+   FORMATO 24H (Windows/Linux español):
+   ✓ Muestra: 17:00, 17:15, 17:30... hasta 22:00
+   
+   FORMATO 12H (Windows inglés, algunos macOS):
+   ✓ Muestra: 5:00 PM, 5:15 PM, 5:30 PM... hasta 10:00 PM
+
+3. Intenta escribir manualmente "15:00" o "3:00 PM"
+4. Debe aparecer alerta: "⚠️ El horario de reservas es de 17:00 a 22:00"
+5. Se resetea a 19:00 (o 7:00 PM)
+
+================================================================================
+🚨 SI SIGUE SIN FUNCIONAR
+================================================================================
+
+PASO 1: VERIFICA QUE SUBISTE EL ARCHIVO CORRECTO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+En GitHub, abre reservas.html y busca esta línea:
+
+    console.log('updateDynamicBenefit called:', {fecha, personas, motivo});
+
+Si NO está → Subiste el archivo VIEJO
+Si SÍ está → Continúa al Paso 2
+
+
+PASO 2: BORRA LA CACHÉ DEL NAVEGADOR
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+CHROME/EDGE:
+    1. Ctrl + Shift + Delete
+    2. Marca "Imágenes y archivos en caché"
+    3. Selecciona "Desde siempre"
+    4. Click "Borrar datos"
+    5. Recarga: Ctrl + Shift + R
+
+FIREFOX:
+    1. Ctrl + Shift + Delete
+    2. Marca "Caché"
+    3. Selecciona "Todo"
+    4. Click "Limpiar ahora"
+    5. Recarga: Ctrl + F5
+
+SAFARI:
+    1. Cmd + Option + E (vaciar caché)
+    2. Cmd + R (recargar)
+
+MÓVIL:
+    1. Configuración → Borrar datos de navegación → Caché
+    2. O usa modo incógnito/privado
+
+
+PASO 3: PRUEBA EN MODO INCÓGNITO
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. Ctrl + Shift + N (Chrome) o Ctrl + Shift + P (Firefox)
+2. Abre: https://almibarcurico-ai.github.io/menu2/reservas.html
+3. Prueba el formulario
+
+Si funciona en incógnito → Era problema de caché
+Si NO funciona → Continúa al Paso 4
+
+
+PASO 4: VERIFICA EN LA CONSOLA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. F12 → Pestaña "Console"
+2. Busca errores en ROJO
+3. Si hay errores, cópialos y repórtalos
+
+Errores comunes:
+    - "Cannot read property 'addEventListener' of null"
+      → El elemento no existe en el HTML
+    
+    - "Uncaught SyntaxError"
+      → Error de sintaxis en el JavaScript
+
+================================================================================
+📋 CHECKLIST DE VERIFICACIÓN
+================================================================================
+
+Marca con ✓ cada item que hayas verificado:
+
+□ Subí el archivo reservas.html del ZIP ALMIBAR-RESERVAS-CORREGIDO-V2.zip
+□ Borré la caché del navegador
+□ Recargué la página con Ctrl+Shift+R
+□ Probé en modo incógnito
+□ Verifiqué que el archivo en GitHub tenga el console.log
+□ Abrí la consola (F12) y busqué mensajes de debug
+□ Verifiqué que no haya errores en rojo en la consola
+
+Si marcaste TODOS y sigue sin funcionar:
+    → Captura de pantalla de la consola (F12)
+    → Captura de pantalla del formulario
+    → Reporta el problema con las capturas
+
+================================================================================
+🎯 RESULTADO ESPERADO
+================================================================================
+
+CUANDO FUNCIONE CORRECTAMENTE:
+
+1. Al seleccionar FECHA → Se ejecuta updateDynamicBenefit()
+2. Al escribir PERSONAS → Se ejecuta updateDynamicBenefit()
+3. Al seleccionar MOTIVO → Se ejecuta updateDynamicBenefit()
+
+4. Si es MIÉRCOLES → Aparece cuadro DORADO:
+   ┌────────────────────────────────────┐
+   │ 🎁 Tus Beneficios:                 │
+   │ ⭐ ¡MIÉRCOLES ESPECIAL!            │
+   │    40% DE DESCUENTO                │
+   └────────────────────────────────────┘
+
+5. Si es OTRO DÍA → Aparece cuadro con beneficios normales:
+   ┌────────────────────────────────────┐
+   │ 🎁 Tus Beneficios:                 │
+   │ • 🍹 Ronda de tequila (10 shots)   │
+   │ • 🎂 2 cócteles de regalo          │
+   └────────────────────────────────────┘
+
+6. Al seleccionar HORA → Solo muestra 17:00 - 22:00
+   (O 5:00 PM - 10:00 PM en formato 12h)
+
+7. Si escribes hora FUERA del rango → Alerta y reset a 19:00
+
+================================================================================
+💡 NOTAS ADICIONALES
+================================================================================
+
+FORMATO DE HORA 12H vs 24H:
+    No hay forma de FORZAR que todos los navegadores muestren 24h.
+    Es una configuración del sistema operativo del usuario.
+    
+    El input FUNCIONA igual en ambos formatos:
+    - 17:00 (24h) = 5:00 PM (12h)
+    - 22:00 (24h) = 10:00 PM (12h)
+    
+    La validación min/max funciona en AMBOS formatos.
+
+BENEFICIOS DINÁMICOS:
+    Requieren que el JavaScript se ejecute.
+    Si el usuario tiene JavaScript desactivado → No funcionará.
+    
+    Solución: Los beneficios también están listados ARRIBA del formulario
+    como referencia visual estática.
+
+COMPATIBILIDAD:
+    ✓ Chrome 90+
+    ✓ Firefox 88+
+    ✓ Safari 14+
+    ✓ Edge 90+
+    ✓ Móviles modernos (iOS 14+, Android 10+)
+
+================================================================================
+📞 SOPORTE
+================================================================================
+
+Si después de seguir TODOS los pasos sigue sin funcionar:
+
+1. Captura la consola del navegador (F12 → Console)
+2. Captura el formulario completo
+3. Captura la URL que estás usando
+4. Indica navegador y sistema operativo
+5. Reporta con todas las capturas
+
+Información útil para reportar:
+    - Navegador: Chrome 120 / Firefox 121 / Safari 17 / etc.
+    - Sistema: Windows 11 / macOS 14 / Android 13 / iOS 17 / etc.
+    - URL exacta que estás probando
+    - ¿Funciona en incógnito? Sí/No
+    - ¿Funciona en otro navegador? Sí/No
+    - ¿Ves errores en consola? Copia el texto
+
+================================================================================

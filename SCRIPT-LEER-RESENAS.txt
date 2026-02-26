@@ -1,0 +1,290 @@
+================================================================================
+📊 GOOGLE APPS SCRIPT - LEER RESEÑAS (API)
+================================================================================
+
+Este script permite que la página ver-resenas.html lea las reseñas desde
+Google Sheets en tiempo real.
+
+================================================================================
+PASO 1: COPIAR ESTE CÓDIGO
+================================================================================
+
+Copia todo el código de abajo y pégalo en Google Apps Script.
+
+--- COPIAR DESDE AQUÍ ---
+
+function doGet(e) {
+  try {
+    const sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    const data = sheet.getDataRange().getValues();
+    
+    // Si no hay datos (solo headers)
+    if (data.length <= 1) {
+      return ContentService
+        .createTextOutput(JSON.stringify({
+          success: true,
+          reviews: []
+        }))
+        .setMimeType(ContentService.MimeType.JSON);
+    }
+    
+    const reviews = [];
+    
+    // Procesar cada fila (saltando el header)
+    for (let i = 1; i < data.length; i++) {
+      const row = data[i];
+      
+      // Formato de las columnas:
+      // 0: Fecha
+      // 1: Nombre
+      // 2: General
+      // 3: Comida
+      // 4: Tragos
+      // 5: Atención
+      // 6: Ambiente
+      // 7: Precio
+      // 8: Recomendaría
+      // 9: Qué gustó
+      // 10: Qué mejorar
+      // 11: Comentarios
+      
+      const general = parseFloat(row[2]) || 0;
+      const comida = parseFloat(row[3]) || 0;
+      const tragos = parseFloat(row[4]) || 0;
+      const atencion = parseFloat(row[5]) || 0;
+      const ambiente = parseFloat(row[6]) || 0;
+      const precio = parseFloat(row[7]) || 0;
+      
+      // Calcular promedio
+      const promedio = ((general + comida + tragos + atencion + ambiente + precio) / 6).toFixed(1);
+      
+      reviews.push({
+        fecha: row[0] || '',
+        nombre: row[1] || 'Anónimo',
+        general: general.toString(),
+        comida: comida.toString(),
+        tragos: tragos.toString(),
+        atencion: atencion.toString(),
+        ambiente: ambiente.toString(),
+        precio: precio.toString(),
+        promedio: promedio,
+        recomendaria: row[8] || '',
+        queGusto: row[9] || '',
+        queMejorar: row[10] || '',
+        comentarios: row[11] || ''
+      });
+    }
+    
+    // Ordenar por fecha (más recientes primero)
+    reviews.reverse();
+    
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        success: true,
+        reviews: reviews,
+        total: reviews.length
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+      
+  } catch (error) {
+    return ContentService
+      .createTextOutput(JSON.stringify({
+        success: false,
+        error: error.toString(),
+        reviews: []
+      }))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}
+
+--- COPIAR HASTA AQUÍ ---
+
+
+================================================================================
+PASO 2: CONFIGURAR EN GOOGLE SHEETS
+================================================================================
+
+1. Abre tu Google Sheet de reseñas (el que creaste con resenas-con-sheets.html)
+
+2. Click en "Extensiones" → "Apps Script"
+
+3. Borra todo el código que aparece
+
+4. Pega el código de arriba
+
+5. Click en "Guardar" (ícono de diskette)
+
+6. Ponle un nombre: "Leer Reseñas API"
+
+
+================================================================================
+PASO 3: PUBLICAR COMO WEB APP
+================================================================================
+
+1. Click en "Implementar" → "Nueva implementación"
+
+2. Click en el ícono de engranaje ⚙️ → Selecciona "Aplicación web"
+
+3. Configura:
+   Descripción: "API para leer reseñas de Almíbar"
+   Ejecutar como: "Yo (tu email)"
+   Quién tiene acceso: "Cualquier persona" ← MUY IMPORTANTE
+
+4. Click en "Implementar"
+
+5. Autoriza los permisos:
+   - Click "Revisar permisos"
+   - Selecciona tu cuenta de Google
+   - Click "Avanzado"
+   - Click "Ir a [nombre del proyecto]"
+   - Click "Permitir"
+
+6. COPIA LA URL que te da
+   Se verá así:
+   https://script.google.com/macros/s/AKfycbx.../exec
+   
+   ⚠️ GUARDA ESTA URL - La necesitarás en el siguiente paso
+
+
+================================================================================
+PASO 4: PROBAR LA API
+================================================================================
+
+1. Pega la URL en tu navegador
+
+2. Deberías ver algo como:
+   {
+     "success": true,
+     "reviews": [...],
+     "total": 3
+   }
+
+3. Si ves esto, ¡funciona! ✅
+
+4. Si ves un error, revisa los pasos anteriores
+
+
+================================================================================
+PASO 5: ACTUALIZAR ver-resenas.html
+================================================================================
+
+1. Abre ver-resenas.html
+
+2. Busca estas líneas (cerca de la línea 417):
+
+   const GOOGLE_SHEETS_URL = 'TU_URL_DE_LECTURA_AQUI';
+   const USE_GOOGLE_SHEETS = false;
+
+3. Cámbialas por:
+
+   const GOOGLE_SHEETS_URL = 'https://script.google.com/macros/s/TU_URL/exec';
+   const USE_GOOGLE_SHEETS = true;
+   
+   (Pega tu URL real del paso 3)
+
+4. Guarda el archivo
+
+5. Sube a GitHub
+
+
+================================================================================
+PASO 6: VERIFICAR QUE FUNCIONA
+================================================================================
+
+1. Entra a: https://almibarcurico-ai.github.io/menu2/ver-resenas.html
+
+2. Deberías ver:
+   - Las reseñas reales de Google Sheets
+   - Estadísticas actualizadas
+   - Promedios calculados
+
+3. Si solo ves los 3 ejemplos, revisa:
+   - Que USE_GOOGLE_SHEETS = true
+   - Que la URL sea correcta
+   - Que la implementación esté publicada
+
+
+================================================================================
+IMPORTANTE - FORMATO DEL GOOGLE SHEET
+================================================================================
+
+Tu Google Sheet debe tener estas columnas en este orden:
+
+A: Fecha
+B: Nombre
+C: Calificación General
+D: Calidad de Comida
+E: Calidad de Tragos
+F: Atención del Personal
+G: Ambiente/Decoración
+H: Relación Precio-Calidad
+I: ¿Nos recomendaría?
+J: ¿Qué le gustó más?
+K: ¿Qué podríamos mejorar?
+L: Comentarios adicionales
+
+Ejemplo de fila:
+08/02/2026 | Juan Pérez | 5 | 5 | 4 | 5 | 5 | 4 | Definitivamente sí | La comida, Los tragos | - | Excelente lugar
+
+
+================================================================================
+SOLUCIÓN DE PROBLEMAS
+================================================================================
+
+ERROR: "Script function not found: doGet"
+→ No pegaste bien el código. Revisa el Paso 1.
+
+ERROR: "Authorization required"
+→ No autorizaste los permisos. Revisa el Paso 3, punto 5.
+
+ERROR: "Access denied"
+→ No configuraste "Cualquier persona" en los permisos. Revisa Paso 3, punto 3.
+
+Las reseñas no aparecen:
+→ Verifica que USE_GOOGLE_SHEETS = true
+→ Verifica que la URL sea correcta (debe terminar en /exec)
+→ Abre la URL en el navegador para verificar que funciona
+
+Solo aparecen los 3 ejemplos:
+→ USE_GOOGLE_SHEETS está en false
+→ Cambia a true y vuelve a subir a GitHub
+
+
+================================================================================
+ACTUALIZACIÓN AUTOMÁTICA
+================================================================================
+
+Una vez configurado:
+1. Cada vez que alguien deja una reseña en resenas-con-sheets.html
+2. Se guarda automáticamente en Google Sheets
+3. La página ver-resenas.html la lee automáticamente
+4. Los usuarios ven las reseñas actualizadas en tiempo real
+
+¡No tienes que hacer nada más! 🎉
+
+
+================================================================================
+SEGURIDAD
+================================================================================
+
+✅ La URL de lectura es pública (correcto)
+   - Cualquiera puede VER las reseñas
+   - Nadie puede MODIFICAR las reseñas
+   - Solo tú puedes editar el Google Sheet
+
+✅ La URL de escritura es privada (de resenas-con-sheets.html)
+   - Solo tu formulario puede escribir
+   - Los usuarios no tienen acceso directo al Sheet
+
+
+================================================================================
+¿NECESITAS AYUDA?
+================================================================================
+
+Si tienes problemas:
+1. Abre la consola del navegador (F12)
+2. Ve a la pestaña "Console"
+3. Busca errores en rojo
+4. Envíame el mensaje de error
+
+¡Listo! 🎉
