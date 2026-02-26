@@ -1,0 +1,220 @@
+================================================================================
+📱 SISTEMA DE RESERVAS - SOLO WHATSAPP
+================================================================================
+
+¡BUENAS NOTICIAS! El archivo reservas.html YA está configurado para funcionar
+SOLO con WhatsApp, sin necesidad de Google Sheets.
+
+================================================================================
+✅ CÓMO FUNCIONA ACTUALMENTE
+================================================================================
+
+1. Cliente entra a: https://almibarcurico-ai.github.io/menu2/reservas.html
+
+2. Llena el formulario:
+   - Nombre completo
+   - WhatsApp
+   - Fecha de reserva
+   - Hora de reserva
+   - Cantidad de personas
+   - Motivo (cumpleaños, celebración, etc.)
+   - Comentarios adicionales
+
+3. El sistema calcula automáticamente los beneficios según:
+   - Cantidad de personas
+   - Motivo de la reserva
+   
+   Ejemplos:
+   • 10+ personas → Shot de tequila gratis para todos
+   • Cumpleaños 2-5 personas → 1 cóctel de regalo
+   • Cumpleaños 6-10 personas → 2 cócteles de regalo
+   • Cumpleaños 10+ personas → 2 cócteles + ronda de tequila
+   • 15+ personas → 40% descuento + ronda de tequila
+
+4. Cliente hace click en "RESERVAR AHORA"
+
+5. Se abre WhatsApp con un mensaje pre-llenado como este:
+
+================================================================================
+📱 EJEMPLO DE MENSAJE QUE LLEGA A WHATSAPP
+================================================================================
+
+📅 NUEVA RESERVA - ALMÍBAR
+
+👤 *Cliente:* Juan Pérez
+📱 *WhatsApp:* +56912345678
+
+📆 *Detalles de la Reserva:*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 Fecha: 25/02/2026
+🕐 Hora: 20:00
+👥 Personas: 12
+🎯 Motivo: 🎂 Cumpleaños
+
+🎁 *BENEFICIOS APLICABLES:*
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 🎉 2 cócteles de regalo para el festejado
+• 🥃 Shot de tequila de cortesía para todos
+
+💬 *Comentarios:*
+Preferimos una mesa cerca de la ventana
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📍 Almíbar Bar & Restaurant
+Francisco Moreno 418, Curicó
+
+✅ Confirmaremos esta reserva a la brevedad
+
+================================================================================
+🎯 VENTAJAS DE ESTE SISTEMA
+================================================================================
+
+✅ Sin configuración - Funciona de inmediato
+✅ Sin Google Sheets - No hay nada que configurar
+✅ Sin permisos - No necesita autorización
+✅ Directo a WhatsApp - Recibes las reservas al instante
+✅ Beneficios automáticos - Se calculan solos según las reglas
+✅ Mensaje profesional - Formato bonito y claro
+✅ 100% confiable - No depende de servicios externos
+
+================================================================================
+📋 LO QUE RECIBES EN WHATSAPP
+================================================================================
+
+Cada vez que alguien hace una reserva, recibirás en tu WhatsApp:
+
+1. Notificación inmediata
+2. Todos los datos del cliente
+3. Detalles de la reserva (fecha, hora, personas)
+4. Motivo de la reserva
+5. Beneficios que le corresponden (calculados automáticamente)
+6. Comentarios adicionales si los dejó
+
+================================================================================
+🔧 CÓMO PERSONALIZAR (SI QUIERES)
+================================================================================
+
+Si quieres cambiar algo del sistema, edita reservas.html:
+
+CAMBIAR EL NÚMERO DE WHATSAPP:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Busca la línea 578:
+   const numeroWhatsApp = '56956581436';
+
+Cámbiala por otro número si necesitas:
+   const numeroWhatsApp = '56912345678';
+
+
+CAMBIAR LOS BENEFICIOS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Busca las líneas 505-530 (aproximadamente)
+Ahí están las reglas de beneficios que puedes modificar
+
+
+CAMBIAR EL MENSAJE:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Busca la línea 539 (donde dice "Create WhatsApp message")
+Puedes editar el formato del mensaje que se envía
+
+================================================================================
+✅ ARCHIVOS DEL SISTEMA
+================================================================================
+
+ARCHIVOS QUE USA:
+• reservas.html ← Este es el que usas (solo WhatsApp)
+
+ARCHIVOS QUE NO NECESITAS:
+• Ningún Google Sheet
+• Ningún Apps Script  
+• Ninguna configuración adicional
+
+================================================================================
+📱 NÚMERO DE WHATSAPP CONFIGURADO
+================================================================================
+
++56 9 5658 1436
+
+Este es el número que recibirá todas las reservas.
+Si quieres cambiarlo, edita la línea 578 de reservas.html
+
+================================================================================
+🎨 CÓMO SE VE PARA EL CLIENTE
+================================================================================
+
+1. Página bonita con degradado naranja-rojo
+2. Formulario claro y fácil de llenar
+3. Selector de fecha (no puede elegir fechas pasadas)
+4. Selector de hora
+5. Beneficios que se muestran en tiempo real mientras llena
+6. Botón grande "RESERVAR AHORA"
+7. Mensaje de éxito con confeti 🎉
+8. WhatsApp se abre automáticamente con el mensaje listo
+
+================================================================================
+🚀 CÓMO ACTIVARLO
+================================================================================
+
+YA ESTÁ ACTIVADO. Solo necesitas:
+
+1. Subir reservas.html a GitHub (si no lo has hecho)
+2. Compartir el link: https://almibarcurico-ai.github.io/menu2/reservas.html
+3. ¡Listo! Empezarás a recibir reservas por WhatsApp
+
+================================================================================
+📊 REGLAS DE BENEFICIOS ACTUALES
+================================================================================
+
+BENEFICIOS POR CANTIDAD DE PERSONAS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 10+ personas → Shot de tequila gratis para todos
+• 15+ personas → 40% descuento en total + ronda de tequila
+
+BENEFICIOS POR CUMPLEAÑOS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+• 2-5 personas → 1 cóctel de regalo para el festejado
+• 6-10 personas → 2 cócteles de regalo para el festejado
+• 10+ personas → 2 cócteles + ronda de tequila
+• 15+ personas + cumpleaños → 40% descuento + tequila + 2 cócteles
+
+Estas reglas están en el código y puedes cambiarlas si quieres.
+
+================================================================================
+💡 CONSEJOS DE USO
+================================================================================
+
+✓ Responde rápido en WhatsApp - Los clientes esperan confirmación pronto
+✓ Guarda las conversaciones - Te sirven como registro
+✓ Confirma siempre - Envía "Reserva confirmada ✅" al cliente
+✓ Recuerda los beneficios - Están en el mensaje, no los olvides
+✓ Ten un template de respuesta listo en WhatsApp
+
+Ejemplo de respuesta:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✅ Reserva Confirmada
+
+Hola [Nombre]! Tu reserva está confirmada:
+
+📅 [Fecha] a las [Hora]
+👥 [Cantidad] personas
+🎁 Beneficios incluidos
+
+Te esperamos en Almíbar 🍹
+Francisco Moreno 418, Curicó
+
+¡Gracias por elegirnos!
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+================================================================================
+🎉 RESUMEN
+================================================================================
+
+✅ reservas.html YA funciona solo con WhatsApp
+✅ NO necesitas configurar nada más
+✅ NO necesitas Google Sheets
+✅ Las reservas llegan directamente a tu WhatsApp
+✅ Los beneficios se calculan automáticamente
+✅ El mensaje está formateado profesionalmente
+
+¡ESTÁ TODO LISTO PARA USAR! 🚀
+
+Solo sube reservas.html a GitHub (si no lo hiciste) y comparte el link.

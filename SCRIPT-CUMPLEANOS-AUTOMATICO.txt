@@ -1,0 +1,396 @@
+================================================================================
+🎂 SISTEMA DE RECORDATORIOS DE CUMPLEAÑOS - AUTOMÁTICO
+================================================================================
+
+Este script te enviará un email automático cada día con los cumpleaños
+de los socios del Club de Amigos.
+
+================================================================================
+PASO 1: COPIAR ESTE CÓDIGO EN GOOGLE APPS SCRIPT
+================================================================================
+
+1. Abre tu Google Sheet del Club de Amigos
+2. Ve a: Extensiones → Apps Script
+3. En el menú izquierdo, verás el archivo "Código.gs"
+4. AGREGA este código AL FINAL del archivo (no borres lo que ya está)
+5. Click en "Guardar"
+
+--- COPIAR DESDE AQUÍ ---
+
+// ============================================
+// RECORDATORIO DE CUMPLEAÑOS - AUTOMÁTICO
+// ============================================
+
+function enviarRecordatoriosCumpleanos() {
+  try {
+    // 📧 CAMBIA ESTE EMAIL POR EL TUYO
+    var emailDestino = "tu-email@gmail.com"; // ← CAMBIA ESTO
+    
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = sheet.getDataRange().getValues();
+    
+    // Fecha de hoy
+    var hoy = new Date();
+    var diaHoy = hoy.getDate();
+    var mesHoy = hoy.getMonth() + 1;
+    
+    // Arrays para almacenar cumpleaños
+    var cumpleañosHoy = [];
+    var cumpleañosProximos3Dias = [];
+    var cumpleañosProximos7Dias = [];
+    
+    // Revisar cada fila (saltando el header en fila 0)
+    for (var i = 1; i < data.length; i++) {
+      var row = data[i];
+      
+      // Columnas del Club de Amigos:
+      // 0: Fecha de registro
+      // 1: Nombre
+      // 2: RUT
+      // 3: Teléfono
+      // 4: Fecha de Nacimiento
+      
+      var nombre = row[1];
+      var telefono = row[3];
+      var fechaNacimiento = new Date(row[4]);
+      
+      if (!fechaNacimiento || isNaN(fechaNacimiento.getTime())) {
+        continue; // Saltar si no hay fecha válida
+      }
+      
+      var diaNac = fechaNacimiento.getDate();
+      var mesNac = fechaNacimiento.getMonth() + 1;
+      
+      // Calcular edad
+      var edad = hoy.getFullYear() - fechaNacimiento.getFullYear();
+      if (mesHoy < mesNac || (mesHoy === mesNac && diaHoy < diaNac)) {
+        edad--;
+      }
+      
+      var socio = {
+        nombre: nombre,
+        telefono: telefono,
+        edad: edad + 1, // Edad que cumplirá
+        diaNac: diaNac,
+        mesNac: mesNac
+      };
+      
+      // Cumpleaños HOY
+      if (diaNac === diaHoy && mesNac === mesHoy) {
+        cumpleañosHoy.push(socio);
+      }
+      
+      // Cumpleaños en 3 días
+      var fechaEn3Dias = new Date(hoy);
+      fechaEn3Dias.setDate(fechaEn3Dias.getDate() + 3);
+      if (diaNac === fechaEn3Dias.getDate() && mesNac === (fechaEn3Dias.getMonth() + 1)) {
+        cumpleañosProximos3Dias.push(socio);
+      }
+      
+      // Cumpleaños en 7 días
+      var fechaEn7Dias = new Date(hoy);
+      fechaEn7Dias.setDate(fechaEn7Dias.getDate() + 7);
+      if (diaNac === fechaEn7Dias.getDate() && mesNac === (fechaEn7Dias.getMonth() + 1)) {
+        cumpleañosProximos7Dias.push(socio);
+      }
+    }
+    
+    // Solo enviar email si hay cumpleaños
+    if (cumpleañosHoy.length > 0 || cumpleañosProximos3Dias.length > 0 || cumpleañosProximos7Dias.length > 0) {
+      enviarEmailCumpleanos(cumpleañosHoy, cumpleañosProximos3Dias, cumpleañosProximos7Dias, emailDestino);
+    }
+    
+    Logger.log("✅ Recordatorio de cumpleaños procesado correctamente");
+    
+  } catch (error) {
+    Logger.log("❌ Error en recordatorio de cumpleaños: " + error.toString());
+  }
+}
+
+function enviarEmailCumpleanos(hoy, en3dias, en7dias, emailDestino) {
+  var asunto = "🎂 Recordatorio de Cumpleaños - Almíbar";
+  var mensaje = "";
+  
+  mensaje += "═══════════════════════════════════════\n";
+  mensaje += "🎂 RECORDATORIO DE CUMPLEAÑOS\n";
+  mensaje += "CLUB DE AMIGOS - ALMÍBAR\n";
+  mensaje += "═══════════════════════════════════════\n\n";
+  mensaje += "📅 Fecha: " + Utilities.formatDate(new Date(), "GMT-3", "dd/MM/yyyy") + "\n\n";
+  
+  // Cumpleaños HOY
+  if (hoy.length > 0) {
+    mensaje += "🎉 CUMPLEAÑOS HOY:\n";
+    mensaje += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    for (var i = 0; i < hoy.length; i++) {
+      mensaje += "🎂 " + hoy[i].nombre + "\n";
+      mensaje += "   📱 " + hoy[i].telefono + "\n";
+      mensaje += "   🎁 Cumple " + hoy[i].edad + " años\n";
+      mensaje += "   ✨ Beneficio: 30% de descuento hoy\n\n";
+    }
+  }
+  
+  // Cumpleaños en 3 días
+  if (en3dias.length > 0) {
+    mensaje += "📢 CUMPLEAÑOS EN 3 DÍAS (Preparar):\n";
+    mensaje += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    for (var i = 0; i < en3dias.length; i++) {
+      mensaje += "📅 " + en3dias[i].nombre + "\n";
+      mensaje += "   📱 " + en3dias[i].telefono + "\n";
+      mensaje += "   🎁 Cumplirá " + en3dias[i].edad + " años\n";
+      mensaje += "   💡 Día: " + en3dias[i].diaNac + "/" + en3dias[i].mesNac + "\n\n";
+    }
+  }
+  
+  // Cumpleaños en 7 días
+  if (en7dias.length > 0) {
+    mensaje += "📆 CUMPLEAÑOS EN 7 DÍAS:\n";
+    mensaje += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+    for (var i = 0; i < en7dias.length; i++) {
+      mensaje += "📌 " + en7dias[i].nombre + "\n";
+      mensaje += "   📱 " + en7dias[i].telefono + "\n";
+      mensaje += "   💡 Día: " + en7dias[i].diaNac + "/" + en7dias[i].mesNac + "\n\n";
+    }
+  }
+  
+  mensaje += "═══════════════════════════════════════\n";
+  mensaje += "💡 ACCIONES RECOMENDADAS:\n";
+  mensaje += "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n";
+  mensaje += "✓ Enviar mensaje de felicitación por WhatsApp\n";
+  mensaje += "✓ Recordar beneficio: 30% de descuento\n";
+  mensaje += "✓ Si reserva: ofrecer cóctel de regalo\n";
+  mensaje += "✓ Hacer post en Instagram Stories\n\n";
+  
+  mensaje += "📊 Google Sheets:\n";
+  mensaje += SpreadsheetApp.getActiveSpreadsheet().getUrl() + "\n";
+  mensaje += "═══════════════════════════════════════\n";
+  
+  // Enviar email
+  MailApp.sendEmail({
+    to: emailDestino,
+    subject: asunto,
+    body: mensaje
+  });
+  
+  Logger.log("✅ Email de cumpleaños enviado a: " + emailDestino);
+}
+
+// ============================================
+// CONFIGURAR RECORDATORIO AUTOMÁTICO
+// ============================================
+function configurarRecordatorioAutomatico() {
+  // Eliminar triggers anteriores para evitar duplicados
+  var triggers = ScriptApp.getProjectTriggers();
+  for (var i = 0; i < triggers.length; i++) {
+    if (triggers[i].getHandlerFunction() === 'enviarRecordatoriosCumpleanos') {
+      ScriptApp.deleteTrigger(triggers[i]);
+    }
+  }
+  
+  // Crear nuevo trigger
+  // Se ejecutará todos los días a las 8:00 AM
+  ScriptApp.newTrigger('enviarRecordatoriosCumpleanos')
+    .timeBased()
+    .everyDays(1)
+    .atHour(8)
+    .create();
+  
+  Logger.log("✅ Recordatorio automático configurado para las 8:00 AM diarias");
+  
+  // Enviar email de confirmación
+  var email = "tu-email@gmail.com"; // ← CAMBIA ESTO
+  MailApp.sendEmail({
+    to: email,
+    subject: "✅ Recordatorios de Cumpleaños Activados - Almíbar",
+    body: "El sistema de recordatorios automáticos de cumpleaños ha sido configurado exitosamente.\n\nRecibirás un email cada día a las 8:00 AM con:\n- Cumpleaños del día\n- Cumpleaños en 3 días\n- Cumpleaños en 7 días\n\nSi no hay cumpleaños, no recibirás email.\n\n¡Saludos!\nSistema Automático Almíbar"
+  });
+}
+
+--- COPIAR HASTA AQUÍ ---
+
+
+================================================================================
+PASO 2: CONFIGURAR TU EMAIL
+================================================================================
+
+En el código que acabas de pegar, busca estas líneas:
+
+   var emailDestino = "tu-email@gmail.com"; // ← CAMBIA ESTO
+
+Cámbialas por tu email real:
+
+   var emailDestino = "hector@almibar.cl"; // Tu email real
+
+Hay 2 lugares donde debes cambiarlo:
+1. En la función enviarRecordatoriosCumpleanos()
+2. En la función configurarRecordatorioAutomatico()
+
+Guarda el archivo (Ctrl+S)
+
+
+================================================================================
+PASO 3: ACTIVAR EL RECORDATORIO AUTOMÁTICO
+================================================================================
+
+1. En Apps Script, busca arriba donde dice "función sin título"
+2. Cambia a: "configurarRecordatorioAutomatico"
+3. Click en "Ejecutar" (botón ▶️)
+4. Autoriza los permisos:
+   - Click "Revisar permisos"
+   - Selecciona tu cuenta
+   - Click "Avanzado"
+   - Click "Ir a [nombre del proyecto]"
+   - Click "Permitir"
+5. Espera a que termine
+6. Deberías recibir un email de confirmación
+
+¡Listo! Ahora recibirás emails automáticos cada día a las 8 AM.
+
+
+================================================================================
+PASO 4: PROBAR EL SISTEMA (Opcional)
+================================================================================
+
+Para probar que funciona sin esperar a mañana:
+
+1. En Apps Script, selecciona la función: "enviarRecordatoriosCumpleanos"
+2. Click en "Ejecutar" (▶️)
+3. Revisa tu email
+4. Si hay socios que cumplen años hoy/próximamente, verás el email
+5. Si no hay nadie, no recibirás nada (es normal)
+
+
+================================================================================
+PASO 5: VERIFICAR QUE ESTÁ ACTIVO
+================================================================================
+
+1. En Apps Script, click en el ícono del reloj ⏰ (Activadores)
+2. Deberías ver:
+   - Función: enviarRecordatoriosCumpleanos
+   - Frecuencia: Diariamente
+   - Hora: 8:00-9:00 AM
+
+Si lo ves, ¡está activo! ✅
+
+
+================================================================================
+FORMATO DEL EMAIL QUE RECIBIRÁS
+================================================================================
+
+Asunto: 🎂 Recordatorio de Cumpleaños - Almíbar
+
+═══════════════════════════════════════
+🎂 RECORDATORIO DE CUMPLEAÑOS
+CLUB DE AMIGOS - ALMÍBAR
+═══════════════════════════════════════
+
+📅 Fecha: 22/02/2026
+
+🎉 CUMPLEAÑOS HOY:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+🎂 Juan Pérez
+   📱 +56912345678
+   🎁 Cumple 35 años
+   ✨ Beneficio: 30% de descuento hoy
+
+📢 CUMPLEAÑOS EN 3 DÍAS (Preparar):
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+📅 María González
+   📱 +56987654321
+   🎁 Cumplirá 28 años
+   💡 Día: 25/02
+
+═══════════════════════════════════════
+💡 ACCIONES RECOMENDADAS:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+✓ Enviar mensaje de felicitación por WhatsApp
+✓ Recordar beneficio: 30% de descuento
+✓ Si reserva: ofrecer cóctel de regalo
+✓ Hacer post en Instagram Stories
+
+📊 Google Sheets:
+https://docs.google.com/spreadsheets/...
+═══════════════════════════════════════
+
+
+================================================================================
+PERSONALIZAR HORARIO
+================================================================================
+
+Si quieres cambiar la hora del recordatorio:
+
+1. En Apps Script, busca esta línea:
+   .atHour(8)
+   
+2. Cambia el número (0-23):
+   .atHour(7)   → 7:00 AM
+   .atHour(9)   → 9:00 AM
+   .atHour(18)  → 6:00 PM
+
+3. Ejecuta nuevamente: configurarRecordatorioAutomatico
+
+
+================================================================================
+DESACTIVAR RECORDATORIOS
+================================================================================
+
+Si quieres apagar los recordatorios:
+
+1. Ve a Apps Script
+2. Click en el ícono del reloj ⏰ (Activadores)
+3. Click en los 3 puntos ⋮ del activador
+4. Click en "Eliminar activador"
+
+
+================================================================================
+SOLUCIÓN DE PROBLEMAS
+================================================================================
+
+No recibo emails:
+→ Verifica que cambiaste el email en el código
+→ Revisa tu carpeta de Spam
+→ Ejecuta manualmente la función para probar
+
+Error "Authorization required":
+→ No autorizaste los permisos
+→ Ejecuta configurarRecordatorioAutomatico y autoriza
+
+No hay nadie en "CUMPLEAÑOS HOY":
+→ Es normal si nadie cumple años hoy
+→ Agrega una fecha de prueba en el Sheet para probar
+
+El activador no aparece:
+→ Ejecuta configurarRecordatorioAutomatico de nuevo
+→ Autoriza todos los permisos que pida
+
+
+================================================================================
+IMPORTANTE - FORMATO DE FECHAS EN GOOGLE SHEETS
+================================================================================
+
+Asegúrate de que en el Google Sheet del Club de Amigos:
+
+- La columna E (Fecha de Nacimiento) esté en formato de FECHA
+- No como texto
+- Formato recomendado: dd/mm/yyyy (Ej: 15/03/1990)
+
+Para cambiar el formato:
+1. Selecciona la columna E
+2. Formato → Número → Fecha
+
+
+================================================================================
+¡LISTO!
+================================================================================
+
+Ahora recibirás emails automáticos cada día con los cumpleaños.
+
+El sistema:
+✅ Se ejecuta solo todos los días a las 8 AM
+✅ Te avisa de cumpleaños HOY
+✅ Te avisa 3 días antes (para preparar)
+✅ Te avisa 7 días antes (para planificar)
+✅ Incluye nombre, teléfono y edad
+✅ Recuerda los beneficios del socio
+✅ Solo envía email si HAY cumpleaños
+
+¡Felicidades! Ya tienes un sistema profesional de recordatorios 🎉
