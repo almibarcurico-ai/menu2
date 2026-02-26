@@ -1,0 +1,175 @@
+# 🌐 SISTEMA BILINGÜE ALMÍBAR - ESPAÑOL/INGLÉS
+
+## 📁 ARCHIVOS ACTUALIZADOS:
+
+✅ **index.html** - Página principal con selector de idioma
+✅ **i18n.js** - Sistema de traducción compartido (NUEVO)
+✅ **manifest.json** - Iconos actualizados
+✅ **icons/** - Carpeta con todos los iconos iOS y Android
+
+---
+
+## 🎯 CÓMO FUNCIONA:
+
+### **Selector de idioma:**
+```
+┌─────────────────┐
+│ 🇪🇸 ES | 🇬🇧 EN │  ← Esquina superior derecha
+└─────────────────┘
+```
+
+- Click en **🇪🇸 ES** → Cambia a Español
+- Click en **🇬🇧 EN** → Cambia a Inglés
+- La preferencia se guarda automáticamente
+- Al volver, usa el último idioma seleccionado
+
+---
+
+## 📋 TEXTOS TRADUCIDOS:
+
+### **Página Principal (index.html):**
+- ✅ "TENGO HAMBRE" → "I'M HUNGRY"
+- ✅ "TENGO SED" → "I'M THIRSTY"
+- ✅ "Comida • Pizzas • Tablas" → "Food • Pizzas • Platters"
+- ✅ "Cócteles • Cervezas • Tragos" → "Cocktails • Beers • Drinks"
+- ✅ "Pide directo desde tu mesa" → "Order directly from your table"
+- ✅ "CLUB DE AMIGOS" → "FRIENDS CLUB"
+- ✅ "VER RESEÑAS" → "VIEW REVIEWS"
+- ✅ "DEJAR RESEÑA" → "LEAVE A REVIEW"
+- ✅ "RESERVAR MESA" → "RESERVE A TABLE"
+
+---
+
+## 💾 SISTEMA DE GUARDADO:
+
+El idioma seleccionado se guarda en:
+```
+localStorage.getItem('almibar_language')
+```
+
+**Valores posibles:**
+- `'es'` = Español
+- `'en'` = English
+
+---
+
+## 🚀 INSTALACIÓN:
+
+### **Opción 1: Actualización Mínima**
+Sube solo estos 2 archivos:
+1. ✅ `index.html`
+2. ✅ `i18n.js` (NUEVO - ponlo en la raíz)
+
+### **Opción 2: Actualización Completa**
+Sube todos los archivos del ZIP:
+1. ✅ `index.html`
+2. ✅ `i18n.js`
+3. ✅ `manifest.json`
+4. ✅ Carpeta `icons/` completa
+
+---
+
+## 🔧 CÓMO EXPANDIR A MÁS PÁGINAS:
+
+Para agregar el selector a otras páginas (menú-cocina.html, etc.):
+
+### **1. Agregar CSS del selector:**
+```html
+<style>
+/* Language Selector */
+.language-selector {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 2000;
+    /* ...resto del CSS */
+}
+</style>
+```
+
+### **2. Agregar HTML del selector:**
+```html
+<div class="language-selector">
+    <button class="lang-btn active" data-lang="es" onclick="changeLanguage('es')">🇪🇸 ES</button>
+    <button class="lang-btn" data-lang="en" onclick="changeLanguage('en')">🇬🇧 EN</button>
+</div>
+```
+
+### **3. Importar el script:**
+```html
+<script src="i18n.js"></script>
+```
+
+### **4. Agregar atributo data-i18n a textos:**
+```html
+<div data-i18n="happy-hour">Happy Hour</div>
+```
+
+---
+
+## 📝 AGREGAR NUEVAS TRADUCCIONES:
+
+Edita el archivo `i18n.js`:
+
+```javascript
+const translations = {
+    es: {
+        'nuevo-texto': 'Texto en español'
+    },
+    en: {
+        'nuevo-texto': 'Text in English'
+    }
+};
+```
+
+---
+
+## ✅ VERIFICACIÓN:
+
+1. Abre index.html en navegador
+2. Verás selector 🇪🇸 ES | 🇬🇧 EN arriba a la derecha
+3. Click en **🇬🇧 EN**
+4. Todos los textos cambian a inglés
+5. Recarga la página
+6. Sigue en inglés (guardado)
+
+---
+
+## 📱 COMPATIBILIDAD:
+
+- ✅ Desktop (Chrome, Firefox, Safari, Edge)
+- ✅ iPhone (Safari)
+- ✅ Android (Chrome, Samsung Internet)
+- ✅ Funciona sin conexión (PWA)
+
+---
+
+## 🎨 PERSONALIZACIÓN:
+
+### **Cambiar banderas:**
+```html
+<button>🇪🇸 ES</button>  → Usar 🇨🇱 CL para Chile
+<button>🇬🇧 EN</button>  → Usar 🇺🇸 US para USA
+```
+
+### **Cambiar colores:**
+```css
+.lang-btn.active {
+    background: linear-gradient(135deg, #FF6B35, #E63946);
+}
+```
+
+---
+
+## 🔮 PRÓXIMOS PASOS (OPCIONALES):
+
+- [ ] Agregar selector a menu-cocina.html
+- [ ] Agregar selector a menu-barra.html
+- [ ] Agregar selector a reservas.html
+- [ ] Traducir nombres de productos del menú
+- [ ] Agregar más idiomas (portugués, francés)
+
+---
+
+**Sistema creado: Febrero 2026**
+**Versión: 1.0**
